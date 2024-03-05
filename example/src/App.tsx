@@ -1,13 +1,39 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'rn-location';
+import {
+  requestLocationPermission,
+  isLocationEnabled,
+  getCurrentPosition,
+} from 'rn-location';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [result] = React.useState<number | undefined>();
+
+  const requestingPermissions = async () => {
+    try {
+      const data = await requestLocationPermission();
+
+      console.log({ data });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  const checkLocationPermission = async () => {
+    try {
+      const data = await isLocationEnabled();
+
+      const location = await getCurrentPosition();
+      console.log({ data, location });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    requestingPermissions();
+    checkLocationPermission();
   }, []);
 
   return (
